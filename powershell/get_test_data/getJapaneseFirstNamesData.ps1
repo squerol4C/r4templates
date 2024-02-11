@@ -26,24 +26,27 @@ foreach ($specifyRankingNode in $selectAreaElement) {
 
     # https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa752541(v=vs.85)
     # IHTMLDocument3
-    # $nameInfoTableContents = $specifyRes.ParsedHtml.querySelectorAll('#content > div.post > table:nth-child(16) > tbody')
     $nameInfoTableContents = $specifyRes.ParsedHtml.querySelector('#content > div.post').getElementsByTagName('table')
     foreach ($nameInfoElements in $nameInfoTableContents) {
 
         foreach ($item in $nameInfoElements.getElementsByTagName('tr')) {
             # $item = $nameInfoElements.getElementsByTagName('tr')
             # $D_ranking = $item.querySelector('td:nth-child(1)').innerText # •cš
-            $D_name = $item.querySelector('td:nth-child(2) > a').innerText # •cš
-            $D_count = $item.querySelector('td:nth-child(3)').innerText # •cš
+            $D_ranking = $item.getElementsByTagName('td')[0].innerText # lŒûŠ„‡
+            $D_name = $null
+            $tableData1 = $item.getElementsByTagName('td')[1]
+            if ($null -ne $tableData1) {
+                $D_name = $tableData1.getElementsByTagName('a')[0].innerText # •cš
+            }
+            $D_count = $item.getElementsByTagName('td')[2].innerText # l”
             if (($null -ne $D_name) -and ($null -ne $D_count)) {
                 $firstNames += ,[PSCustomObject]@{
                     'firstName' = $D_name
                 }
-                # Write-Host "•cš: ${D_name} l” = ${D_count}"
+                Write-Host "•cš: ${D_name} l” = ${D_count} (${D_ranking})"
             }
         }
     }
-    Start-Sleep 1
 }
 
 $firstNames
