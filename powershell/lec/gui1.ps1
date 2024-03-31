@@ -10,7 +10,7 @@ $form.Size = New-Object System.Drawing.Size(400,300) # Window size
 # Making a TextBox
 $textBox = New-Object System.Windows.Forms.TextBox
 $textBox.Location = New-Object System.Drawing.Point(10, 40)
-$textBox.Size = New-Object System.Drawing.Point(200, 15)
+$textBox.Size = New-Object System.Drawing.Size(200, 15)
 $textBox.AllowDrop = $true
 $textBox.Add_DragEnter({$_.Effect = 'ALL'})
 $textBox.Add_DragDrop({ $Name = @($_.Data.GetData("FileDrop")); [System.Windows.Forms.MessageBox]::Show($Name[0], 'ƒtƒ@ƒCƒ‹PATH') })
@@ -27,7 +27,7 @@ $form.Controls.Add($label1)
 $button1 = New-Object System.Windows.Forms.Button
 $button1.Location = New-Object System.Drawing.Point(10, 10)
 $button1.Text = 'Pushable Button1'
-$button1.Size = New-Object System.Drawing.Point(105, 20)
+$button1.Size = New-Object System.Drawing.Size(105, 20)
 $form.Controls.Add($button1)
 
 
