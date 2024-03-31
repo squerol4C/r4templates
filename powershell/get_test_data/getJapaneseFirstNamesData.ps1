@@ -10,7 +10,7 @@ myoji-yurai.net様から苗字のデータを生成する。
 [Microsoft.PowerShell.Commands.HtmlWebResponseObject]$res = Invoke-WebRequest 'https://myoji-yurai.net/prefectureRanking.htm'
 $selectAreaElement = $res.ParsedHtml.getElementById('form_rankingSelect')
 
-$firstNames = @()
+$datas = @()
 
 
 foreach ($specifyRankingNode in $selectAreaElement) {
@@ -40,15 +40,23 @@ foreach ($specifyRankingNode in $selectAreaElement) {
             }
             $D_count = $item.getElementsByTagName('td')[2].innerText # 人数
             if (($null -ne $D_name) -and ($null -ne $D_count)) {
-                $firstNames += ,[PSCustomObject]@{
+                $m1 = [regex]::Match($D_count.Replace(',', ''), '\d+')
+                $D_total = $m1.Value
+                $m2 = [regex]::Match($D_ranking, '\d+')
+                $D_rank = $m2.Value
+
+
+                $datas += ,[PSCustomObject]@{
                     'firstName' = $D_name
+                    'total' = $D_total
+                    'ranking' = $D_rank
                 }
-                Write-Host "苗字: ${D_name} 人数 = ${D_count} (${D_ranking})"
+                # Write-Host "苗字: ${D_name} 人数 = ${D_total} (${D_ranking})"
             }
         }
     }
 }
 
-$firstNames
+$datas | ConvertTo-Csv -NoTypeInformation | Out-File 'first_names.csv' -Encoding UTF8
 # $specifyUrl = 'https://myoji-yurai.net/prefectureRanking.htm?prefecture=%E5%85%A8%E5%9B%BD&page=0'
 Write-Host 'done.'
